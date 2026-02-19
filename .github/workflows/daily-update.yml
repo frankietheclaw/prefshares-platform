@@ -1,0 +1,39 @@
+name: Daily Preferred Shares Price Update
+
+on:
+  schedule:
+    # Run at 9:30 PM UTC = 4:30 PM ET (after market close)
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r scripts/requirements.txt
+      
+      - name: Run daily price update
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          python scripts/daily_scraper.py
+      
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-logs
+          path: |
+            *.log
