@@ -8,8 +8,8 @@ export default function AdminLoginPage() {
     const username = formData.get('username') as string
     const password = formData.get('password') as string
     
-    const validUsername = process.env.ADMIN_USERNAME || 'admin'
-    const validPassword = process.env.ADMIN_PASSWORD || 'PrefShares2026!'
+    const validUsername = process.env.ADMIN_USERNAME || 'Frankie2930'
+    const validPassword = process.env.ADMIN_PASSWORD || 'CKZHj0WhKNBOMyLD3EXZef1ZdNfzbFmG4'
     
     if (username === validUsername && password === validPassword) {
       cookies().set('admin_auth', 'authenticated', {

@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Admin credentials - in production, use environment variables
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin'
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'PrefShares2026!'
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'Frankie2930'
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'CKZHj0WhKNBOMyLD3EXZef1ZdNfzbFmG4'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
