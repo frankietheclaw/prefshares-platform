@@ -9,7 +9,7 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <TrendingUp className="h-8 w-8 text-primary-600" />
-              <span className="text-xl font-bold text-gray-900">PrefShares.ca</span>
+              <span className="text-xl font-bold text-gray-900">Pref Shares Data</span>
             </Link>
           </div>
           

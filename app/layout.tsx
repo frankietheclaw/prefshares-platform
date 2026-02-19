@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Canadian Preferred Shares',
-  description: 'Complete database and analysis tools for Canadian preferred shares',
+  title: 'Pref Shares Data - Canadian Preferred Shares Database',
+  description: 'Complete database and analysis tools for Canadian preferred shares - yields, ratings, comparisons, and daily market updates.',
 }
 
 export default function RootLayout({
