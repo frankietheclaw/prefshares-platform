@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Navbar from '@/components/navbar'
+import Link from 'next/link'
 
 export default async function CreatePostPage() {
   async function createPost(formData: FormData) {
@@ -35,11 +36,28 @@ export default async function CreatePostPage() {
     redirect('/blog')
   }
 
+  async function logout() {
+    'use server'
+    const { cookies } = await import('next/headers')
+    cookies().delete('admin_auth')
+    redirect('/')
+  }
+
   return (
     <>
       <Navbar />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Create Blog Post</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Create Blog Post</h1>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            >
+              Logout
+            </button>
+          </form>
+        </div>
         
         <form action={createPost} className="space-y-6 bg-white shadow rounded-lg p-6">
           <div>
