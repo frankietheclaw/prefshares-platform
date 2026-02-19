@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Navbar from '@/components/navbar'
 import { formatDate } from '@/lib/utils'
-import type { BlogPost } from '@/types/database'
 
 export default async function BlogPage() {
   const supabase = createClient()
@@ -34,7 +33,7 @@ export default async function BlogPage() {
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          {posts?.map((post: BlogPost) => (
+          {posts?.map((post: any) => (
             <div
               key={post.id}
               className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow"

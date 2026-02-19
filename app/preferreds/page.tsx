@@ -2,11 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Navbar from '@/components/navbar'
 import { formatYield, formatPrice, formatSpread, getIssueTypeColor, getRatingColor } from '@/lib/utils'
-import type { PreferredShare, Issuer } from '@/types/database'
-
-type PreferredWithIssuer = PreferredShare & {
-  issuers: Pick<Issuer, 'ticker' | 'name' | 'sector'> | null
-}
 
 export default async function PreferredsPage() {
   const supabase = createClient()
@@ -19,7 +14,14 @@ export default async function PreferredsPage() {
 
   if (error) {
     console.error('Error fetching preferreds:', error)
-    return <div>Error loading data</div>
+    return (
+      <>
+        <Navbar />
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <p className="text-red-500">Error loading data</p>
+        </div>
+      </>
+    )
   }
 
   return (
@@ -52,7 +54,7 @@ export default async function PreferredsPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {preferreds?.map((pref) => (
+                    {preferreds?.map((pref: any) => (
                       <tr key={pref.id} className="hover:bg-gray-50">
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                           <Link 

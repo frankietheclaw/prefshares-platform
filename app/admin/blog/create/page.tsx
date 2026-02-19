@@ -3,10 +3,6 @@ import { redirect } from 'next/navigation'
 import Navbar from '@/components/navbar'
 
 export default async function CreatePostPage() {
-  // Check if user is admin (you'll need to implement this check)
-  // For now, this is a simple form that anyone with the URL can use
-  // In production, add authentication check here
-
   async function createPost(formData: FormData) {
     'use server'
     
@@ -29,7 +25,7 @@ export default async function CreatePostPage() {
         status: 'published',
         published_at: new Date().toISOString(),
         author: 'AI Analyst'
-      })
+      } as any)
     
     if (error) {
       console.error('Error creating post:', error)
