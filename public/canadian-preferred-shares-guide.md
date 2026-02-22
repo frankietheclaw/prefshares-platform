@@ -756,6 +756,21 @@ New Yield: 0.40% + 3.02% = 3.42%
 
 ---
 
-**Prepared by:** GLM-5 Financial Analysis
+## Important Disclaimer
 
-**Date:** February 18, 2026
+⚠️ **This guide is for informational and educational purposes only.** It does not constitute financial, investment, tax, or legal advice. The information presented reflects general market conditions and should not be relied upon for making investment decisions.
+
+**Key Warnings:**
+- Past performance is not indicative of future results
+- All investments carry risk of loss
+- You should consult with a licensed financial advisor before making any investment decisions
+- The author is not a registered investment advisor
+- This content does not consider your personal financial situation
+
+---
+
+**Prepared by:** Frankie
+
+**Date:** February 2026
+
+**Contact:** https://preferredsharesdata.com
