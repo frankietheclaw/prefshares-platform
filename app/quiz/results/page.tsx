@@ -335,6 +335,26 @@ export default function ResultsPage() {
                 Your personalized investment report has been saved. We'll send updates to <strong>{email}</strong>.
               </p>
               
+              {/* Free PDF Download */}
+              <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 mb-6">
+                <h3 className="text-lg font-bold text-primary-900 mb-2">
+                  📚 Free Download: Canadian Preferred Shares Guide
+                </h3>
+                <p className="text-sm text-primary-700 mb-4">
+                  Get our comprehensive institutional analysis of Canadian preferred shares — covering rate resets, credit ratings, tax advantages, and yield strategies.
+                </p>
+                <a
+                  href="/canadian-preferred-shares-guide.pdf"
+                  download
+                  className="inline-flex items-center bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Download PDF Guide
+                </a>
+              </div>
+              
               <div className="space-y-3">
                 <Link
                   href="/preferreds"
