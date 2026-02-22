@@ -43,11 +43,13 @@ export default async function HomePage() {
               </div>
               <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
                 <Link
-                  href="/rankings"
+                  href="/quiz"
                   className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg"
                 >
-                  View Rankings
+                  Take the Quiz 🎯
                 </Link>
+              </div>
+            </div>
               </div>
             </div>
           </div>
