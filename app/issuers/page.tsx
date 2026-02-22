@@ -28,7 +28,7 @@ export default async function IssuersPage() {
   }
 
   // Group by sector
-  const sectors = [...new Set(issuers?.map((i: any) => i.sector))].filter(Boolean)
+  const sectors = Array.from(new Set(issuers?.map((i: any) => i.sector))).filter(Boolean)
 
   return (
     <>
