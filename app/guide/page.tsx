@@ -585,3 +585,526 @@ Savings: $141 (26% tax reduction)</pre>
                   <tr className="bg-green-50">
                     <td className="px-3 py-2 font-bold">Preferred Share</td>
                     <td className="px-3 py-2 font-bold">6.00%</td>
+                    <td className="px-3 py-2 font-bold">39.3%</td>
+                    <td className="px-3 py-2 font-bold text-green-600">3.64%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="bg-green-50 border-l-4 border-green-500 p-4 mb-6">
+              <p className="text-green-800">
+                <strong>Result:</strong> Preferred shares provide 56% higher after-tax yield than equivalent fixed income.
+              </p>
+            </div>
+
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Tax-Advantaged Accounts</h3>
+            
+            <div className="overflow-x-auto mb-6">
+              <table className="min-w-full border border-gray-200 text-sm">
+                <thead className="bg-primary-600 text-white">
+                  <tr>
+                    <th className="px-3 py-2 text-left">Account Type</th>
+                    <th className="px-3 py-2 text-left">Recommended?</th>
+                    <th className="px-3 py-2 text-left">Rationale</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-medium">RRSP/RRIF</td>
+                    <td className="px-3 py-2 text-red-600">❌ Avoid</td>
+                    <td className="px-3 py-2">Tax deferral wastes DTC benefit</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2 font-medium">TFSA</td>
+                    <td className="px-3 py-2 text-yellow-600">⚠️ Neutral</td>
+                    <td className="px-3 py-2">No tax, but DTC unused; consider growth assets</td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-medium">Non-Registered</td>
+                    <td className="px-3 py-2 text-green-600">✅ Optimal</td>
+                    <td className="px-3 py-2">Maximize dividend tax credit</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2 font-medium">Corporation</td>
+                    <td className="px-3 py-2 text-green-600">✅ Excellent</td>
+                    <td className="px-3 py-2">Part IV tax recovery mechanism</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Section VII: Risks */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">VII. Risks Specific to Canadian Preferreds</h2>
+            
+            <div className="space-y-6">
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-bold text-gray-900 mb-2">1. Rate Reset Risk</h4>
+                <p className="text-gray-700 mb-4">At reset date, dividend recalculates based on GoC 5-year yield. If rates have fallen, income drops.</p>
+                <div className="bg-gray-100 p-3 rounded text-sm">
+                  <strong>Example:</strong> BMO.PR.J dropped from 5.50% to 3.42% at 2020 reset — a 38% income reduction.
+                </div>
+                <p className="text-gray-600 text-sm mt-2"><strong>Mitigation:</strong> Focus on wider spreads (+3.00%+), consider fixed-to-floating structures.</p>
+              </div>
+              
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-bold text-gray-900 mb-2">2. Negative Convexity</h4>
+                <p className="text-gray-700">Rate reset preferreds behave counterintuitively: capped upside when rates rise, full downside when rates fall. Asymmetric risk profile.</p>
+              </div>
+              
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-bold text-gray-900 mb-2">3. Liquidity Risk</h4>
+                <p className="text-gray-700 mb-4">Many issues trade infrequently. Bid-ask spreads can be 1-2%+.</p>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full text-sm">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="px-3 py-2 text-left">Tier</th>
+                        <th className="px-3 py-2 text-left">Daily Volume</th>
+                        <th className="px-3 py-2 text-left">Bid-Ask Spread</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y">
+                      <tr><td className="px-3 py-2">High</td><td className="px-3 py-2">50,000+</td><td className="px-3 py-2">0.25% - 0.50%</td></tr>
+                      <tr><td className="px-3 py-2">Medium</td><td className="px-3 py-2">10,000-50,000</td><td className="px-3 py-2">0.50% - 1.00%</td></tr>
+                      <tr><td className="px-3 py-2">Low</td><td className="px-3 py-2">&lt;10,000</td><td className="px-3 py-2">1.00% - 2.00%</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-gray-600 text-sm mt-2"><strong>Mitigation:</strong> Use limit orders only. Never market orders.</p>
+              </div>
+              
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-bold text-gray-900 mb-2">4. Extension Risk</h4>
+                <p className="text-gray-700">Issuer may choose not to call at call date, forcing continued holding at reset rate.</p>
+              </div>
+              
+              <div className="border border-red-200 bg-red-50 rounded-lg p-6">
+                <h4 className="font-bold text-red-800 mb-2">5. Split Share Corp Risk</h4>
+                <p className="text-red-700">Complex structures with embedded leverage. DFN preferreds dropped 60%+ in March 2020. Some suspended dividends.</p>
+                <p className="text-red-600 text-sm mt-2"><strong>Recommendation:</strong> Avoid unless you fully understand the structure.</p>
+              </div>
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Section VIII: ETFs */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">VIII. ETF Options</h2>
+            
+            <div className="overflow-x-auto mb-6">
+              <table className="min-w-full border border-gray-200 text-sm">
+                <thead className="bg-primary-600 text-white">
+                  <tr>
+                    <th className="px-3 py-2 text-left">Ticker</th>
+                    <th className="px-3 py-2 text-left">Name</th>
+                    <th className="px-3 py-2 text-left">MER</th>
+                    <th className="px-3 py-2 text-left">Yield</th>
+                    <th className="px-3 py-2 text-left">Assets</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-bold">CPD</td>
+                    <td className="px-3 py-2">iShares S&P/TSX Pref Share</td>
+                    <td className="px-3 py-2">0.45%</td>
+                    <td className="px-3 py-2">5.8%</td>
+                    <td className="px-3 py-2">$2.1B</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2 font-bold">ZPR</td>
+                    <td className="px-3 py-2">BMO Laddered Pref Share</td>
+                    <td className="px-3 py-2">0.35%</td>
+                    <td className="px-3 py-2">5.5%</td>
+                    <td className="px-3 py-2">$1.5B</td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-bold">HPR</td>
+                    <td className="px-3 py-2">Horizons Active Pref Share</td>
+                    <td className="px-3 py-2">0.60%</td>
+                    <td className="px-3 py-2">6.2%</td>
+                    <td className="px-3 py-2">$400M</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2 font-bold">PFF.TO</td>
+                    <td className="px-3 py-2">Global X Can Pref Share</td>
+                    <td className="px-3 py-2">0.45%</td>
+                    <td className="px-3 py-2">5.7%</td>
+                    <td className="px-3 py-2">$600M</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+              <p className="text-blue-800">
+                <strong>Recommendation:</strong> CPD for yield maximization, ZPR for lower rate risk (laddered approach).
+              </p>
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Section IX: Portfolio Construction */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">IX. Portfolio Construction</h2>
+            
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Conservative Income Portfolio ($100,000)</h3>
+            
+            <div className="bg-gray-50 p-4 rounded-lg mb-6">
+              <p className="font-semibold mb-2">Bank Perpetuals (40%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• RY.PR.F — 5.00% — $15,000</li>
+                <li>• TD.PR.W — 4.35% — $15,000</li>
+                <li>• BMO.PR.Y — 4.50% — $10,000</li>
+              </ul>
+              <p className="font-semibold mb-2">Bank Rate Resets (35%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• BNS.PR.W — 6.25%, spread +3.20% — $20,000</li>
+                <li>• CM.PR.T — 6.00%, spread +3.10% — $15,000</li>
+              </ul>
+              <p className="font-semibold mb-2">Utilities (15%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• FTS.PR.G — 5.25% — $15,000</li>
+              </ul>
+              <p className="font-semibold mb-2">Insurance (10%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• SLF.PR.E — 6.25% — $10,000</li>
+              </ul>
+              <div className="border-t pt-4 mt-4">
+                <p className="font-bold text-green-700">Weighted Average Yield: 5.85%</p>
+                <p className="text-gray-600">Average Reset Spread: +3.05%</p>
+              </div>
+            </div>
+
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Enhanced Yield Portfolio ($100,000)</h3>
+            
+            <div className="bg-gray-50 p-4 rounded-lg mb-6">
+              <p className="font-semibold mb-2">Bank Rate Resets (30%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• NA.PR.K — 6.50%, spread +3.40% — $20,000</li>
+                <li>• BMO.PR.N — 6.25%, spread +3.25% — $10,000</li>
+              </ul>
+              <p className="font-semibold mb-2">Insurance Resets (20%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• MFC.PR.J — 7.00%, spread +3.50% — $15,000</li>
+                <li>• SLF.PR.H — 6.50%, spread +3.20% — $5,000</li>
+              </ul>
+              <p className="font-semibold mb-2">REIT Preferreds (15%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• BPY.PR.T — 7.25% — $15,000</li>
+              </ul>
+              <p className="font-semibold mb-2">Floating Rate (20%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• NA.PR.H — Quarterly floating — $10,000</li>
+                <li>• TD.PR.V — Floating — $10,000</li>
+              </ul>
+              <p className="font-semibold mb-2">High-Yield (15%)</p>
+              <ul className="text-sm text-gray-700 space-y-1 mb-4">
+                <li>• FFH.PR.G — 8.00% (Fairfax, higher risk) — $15,000</li>
+              </ul>
+              <div className="border-t pt-4 mt-4">
+                <p className="font-bold text-green-700">Weighted Average Yield: 6.95%</p>
+                <p className="text-yellow-600">Risk Level: Moderate-High</p>
+              </div>
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Section X: Market Assessment */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">X. Current Market Assessment</h2>
+            
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                <h4 className="font-bold text-green-800 mb-4 flex items-center">
+                  <CheckCircle className="w-5 h-5 mr-2" />
+                  Bull Case
+                </h4>
+                <ul className="text-sm text-green-700 space-y-2">
+                  <li>✅ Yields at multi-year highs — 5.5% - 7%+ available</li>
+                  <li>✅ Reset spreads wide — +3.00%+ historically attractive</li>
+                  <li>✅ Bank credit quality — Big 6 fortress balance sheets</li>
+                  <li>✅ Tax efficiency — Dividend tax credit enhances after-tax yield</li>
+                  <li>✅ Rate normalization — GoC yields stable, reset risk reduced</li>
+                </ul>
+              </div>
+              
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                <h4 className="font-bold text-red-800 mb-4 flex items-center">
+                  <XCircle className="w-5 h-5 mr-2" />
+                  Bear Case
+                </h4>
+                <ul className="text-sm text-red-700 space-y-2">
+                  <li>⚠️ Negative convexity — Capped upside in falling rate scenarios</li>
+                  <li>⚠️ Extension risk — Issuers may not call at first opportunity</li>
+                  <li>⚠️ Liquidity — Some issues trade infrequently</li>
+                  <li>⚠️ Rate sensitivity — Perpetual preferreds fall if rates rise</li>
+                  <li>⚠️ Concentrated market — Banks dominate, sector risk</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="bg-primary-50 rounded-lg p-6 mb-6">
+              <h3 className="text-xl font-bold text-primary-900 mb-2">Verdict: Moderately Bullish</h3>
+              <p className="text-primary-800">
+                Current yields and reset spreads compensate for structural risks. Suitable for income-focused investors with 3+ year horizon.
+              </p>
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Section XI: Execution Guidelines */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">XI. Execution Guidelines</h2>
+            
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                <h4 className="font-bold text-green-800 mb-4">What to Buy</h4>
+                <ul className="text-sm text-green-700 space-y-2">
+                  <li>1. Bank rate resets with spreads +3.00% or wider</li>
+                  <li>2. Perpetuals at par or below from P-1 rated issuers</li>
+                  <li>3. Utility preferreds for stability</li>
+                  <li>4. Floating rate if you expect rates to rise</li>
+                </ul>
+              </div>
+              
+              <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                <h4 className="font-bold text-red-800 mb-4">What to Avoid</h4>
+                <ul className="text-sm text-red-700 space-y-2">
+                  <li>1. Issues trading &gt;$27 (above par, call risk)</li>
+                  <li>2. Split share corporations (DFN, FFN, etc.)</li>
+                  <li>3. Issues resetting in &lt;6 months when rates falling</li>
+                  <li>4. Low-volume issues (&lt;10,000 daily)</li>
+                  <li>5. Below P-2 rated issuers</li>
+                </ul>
+              </div>
+            </div>
+            
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Screening Criteria</h3>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p className="font-semibold mb-2">Minimum Criteria:</p>
+              <ul className="text-sm text-gray-700 grid md:grid-cols-2 gap-2">
+                <li>✓ Rating: P-2 (DBRS) or better</li>
+                <li>✓ Current Yield: 5.5%+</li>
+                <li>✓ Reset Spread: +2.80% or wider</li>
+                <li>✓ Daily Volume: 15,000+</li>
+                <li>✓ Price: ≤$26.00</li>
+                <li>✓ Call Protection: 2+ years</li>
+                <li>✓ Cumulative Dividends: Yes</li>
+              </ul>
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Section XII: Recommended Buys */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">XII. Recommended Buys (February 2026)</h2>
+            
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Conservative Selections</h3>
+            
+            <div className="overflow-x-auto mb-6">
+              <table className="min-w-full border border-gray-200 text-sm">
+                <thead className="bg-primary-600 text-white">
+                  <tr>
+                    <th className="px-3 py-2 text-left">Issue</th>
+                    <th className="px-3 py-2 text-left">Issuer</th>
+                    <th className="px-3 py-2 text-left">Type</th>
+                    <th className="px-3 py-2 text-left">Yield</th>
+                    <th className="px-3 py-2 text-left">Spread</th>
+                    <th className="px-3 py-2 text-left">Rating</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-bold">RY.PR.H</td>
+                    <td className="px-3 py-2">Royal Bank</td>
+                    <td className="px-3 py-2">Reset</td>
+                    <td className="px-3 py-2">6.10%</td>
+                    <td className="px-3 py-2">+3.15%</td>
+                    <td className="px-3 py-2">P-1</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2 font-bold">TD.PR.N</td>
+                    <td className="px-3 py-2">TD Bank</td>
+                    <td className="px-3 py-2">Reset</td>
+                    <td className="px-3 py-2">6.05%</td>
+                    <td className="px-3 py-2">+3.10%</td>
+                    <td className="px-3 py-2">P-1</td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-bold">FTS.PR.H</td>
+                    <td className="px-3 py-2">Fortis</td>
+                    <td className="px-3 py-2">Reset</td>
+                    <td className="px-3 py-2">5.45%</td>
+                    <td className="px-3 py-2">+2.85%</td>
+                    <td className="px-3 py-2">P-1</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2 font-bold">BMO.PR.Q</td>
+                    <td className="px-3 py-2">BMO</td>
+                    <td className="px-3 py-2">Reset</td>
+                    <td className="px-3 py-2">6.20%</td>
+                    <td className="px-3 py-2">+3.25%</td>
+                    <td className="px-3 py-2">P-1</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Enhanced Yield Selections</h3>
+            
+            <div className="overflow-x-auto mb-6">
+              <table className="min-w-full border border-gray-200 text-sm">
+                <thead className="bg-primary-600 text-white">
+                  <tr>
+                    <th className="px-3 py-2 text-left">Issue</th>
+                    <th className="px-3 py-2 text-left">Issuer</th>
+                    <th className="px-3 py-2 text-left">Type</th>
+                    <th className="px-3 py-2 text-left">Yield</th>
+                    <th className="px-3 py-2 text-left">Spread</th>
+                    <th className="px-3 py-2 text-left">Rating</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-bold">NA.PR.K</td>
+                    <td className="px-3 py-2">National Bank</td>
+                    <td className="px-3 py-2">Reset</td>
+                    <td className="px-3 py-2">6.55%</td>
+                    <td className="px-3 py-2">+3.40%</td>
+                    <td className="px-3 py-2">P-1</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2 font-bold">MFC.PR.J</td>
+                    <td className="px-3 py-2">Manulife</td>
+                    <td className="px-3 py-2">Reset</td>
+                    <td className="px-3 py-2">7.00%</td>
+                    <td className="px-3 py-2">+3.50%</td>
+                    <td className="px-3 py-2">P-1</td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="px-3 py-2 font-bold">CM.PR.V</td>
+                    <td className="px-3 py-2">CIBC</td>
+                    <td className="px-3 py-2">Floating</td>
+                    <td className="px-3 py-2">6.25%</td>
+                    <td className="px-3 py-2">N/A</td>
+                    <td className="px-3 py-2">P-1</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <hr className="my-8" />
+
+            {/* Section XIII: Final Assessment */}
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">XIII. Final Assessment</h2>
+            
+            <p className="text-gray-700 mb-6">
+              <strong>Canadian preferred shares remain an attractive income vehicle</strong> for tax-aware investors. The rate reset structure—while complex—provides opportunities when spreads are wide (as they are now).
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Key Takeaways</h3>
+            <ol className="list-decimal list-inside text-gray-700 space-y-2 mb-6">
+              <li><strong>Hold in non-registered accounts</strong> to maximize dividend tax credit</li>
+              <li><strong>Focus on reset spreads</strong> — +3.00%+ is attractive territory</li>
+              <li><strong>Diversify across 10+ issues</strong> or use ETFs</li>
+              <li><strong>Understand the structure</strong> — rate resets behave differently than perpetuals</li>
+              <li><strong>Monitor GoC 5-year yields</strong> — they drive reset economics</li>
+            </ol>
+
+            <h3 className="text-xl font-semibold text-gray-800 mt-6 mb-4">Suitability Matrix</h3>
+            
+            <div className="overflow-x-auto mb-6">
+              <table className="min-w-full border border-gray-200 text-sm">
+                <thead className="bg-primary-600 text-white">
+                  <tr>
+                    <th className="px-3 py-2 text-left">Investor Type</th>
+                    <th className="px-3 py-2 text-left">Suitability</th>
+                    <th className="px-3 py-2 text-left">Suggested Allocation</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr className="bg-white">
+                    <td className="px-3 py-2">Retiree (income focus)</td>
+                    <td className="px-3 py-2 text-green-600 font-bold">✅ Excellent</td>
+                    <td className="px-3 py-2">20-35%</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2">Accumulator (growth focus)</td>
+                    <td className="px-3 py-2 text-yellow-600">⚠️ Limited</td>
+                    <td className="px-3 py-2">0-10%</td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="px-3 py-2">Conservative</td>
+                    <td className="px-3 py-2 text-green-600">✅ Good</td>
+                    <td className="px-3 py-2">15-25%</td>
+                  </tr>
+                  <tr className="bg-gray-50">
+                    <td className="px-3 py-2">Taxable account holder</td>
+                    <td className="px-3 py-2 text-green-600 font-bold">✅ Excellent</td>
+                    <td className="px-3 py-2">20-30%</td>
+                  </tr>
+                  <tr className="bg-white">
+                    <td className="px-3 py-2">RRSP/TFSA only</td>
+                    <td className="px-3 py-2 text-yellow-600">⚠️ Suboptimal</td>
+                    <td className="px-3 py-2">Consider bonds instead</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 my-8">
+              <div className="bg-gray-100 rounded-lg p-4 text-center">
+                <div className="text-3xl font-bold text-primary-600">3/5</div>
+                <div className="text-sm text-gray-600">Risk Rating</div>
+              </div>
+              <div className="bg-gray-100 rounded-lg p-4 text-center">
+                <div className="text-3xl font-bold text-primary-600">Moderate</div>
+                <div className="text-sm text-gray-600">Suitability</div>
+              </div>
+              <div className="bg-gray-100 rounded-lg p-4 text-center">
+                <div className="text-3xl font-bold text-green-600">Favorable</div>
+                <div className="text-sm text-gray-600">Environment</div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Download CTA */}
+          <div className="mt-8 bg-white rounded-xl shadow-lg p-8 text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">
+              Want to Save This Guide?
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Download the complete PDF version for offline reading.
+            </p>
+            <a
+              href="/canadian-preferred-shares-guide.pdf"
+              download
+              className="inline-flex items-center bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download PDF Guide
+            </a>
+          </div>
+
+          {/* Disclaimer */}
+          <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+            <h4 className="font-bold text-yellow-800 mb-2">⚠️ Important Disclaimer</h4>
+            <p className="text-sm text-yellow-800">
+              This guide is for informational and educational purposes only. It does not constitute financial, investment, tax, or legal advice. 
+              Past performance is not indicative of future results. All investments carry risk of loss. 
+              You should consult with a licensed financial advisor before making any investment decisions. 
+              The author is not a registered investment advisor. This content does not consider your personal financial situation.
+            </p>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-8 text-center text-sm text-gray-500">
+            <p><strong>Prepared by:</strong> Frankie</p>
+            <p><strong>Date:</strong> February 2026</p>
+            <p><strong>Contact:</strong> <a href="https://preferredsharesdata.com" className="text-primary-600 hover:underline">preferredsharesdata.com</a></p>
+          </div>
+
+        </div>
+      </div>
+    </>
+  )
+}
