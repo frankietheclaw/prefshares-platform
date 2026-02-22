@@ -6,11 +6,11 @@ export async function GET() {
   
   const { data, error } = await supabase
     .from('preferred_shares')
-    .select('*, issuers(ticker, name, sector)')
+    .select('id, symbol, issue_type, last_price, current_yield, credit_rating, reset_spread, issuers(ticker, name, sector)')
     .eq('is_active', true)
 
   if (error) {
-    return NextResponse.json({ error: 'Failed to load preferreds' }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
   return NextResponse.json(data)
