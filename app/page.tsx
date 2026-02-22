@@ -1,8 +1,22 @@
+import { createClient } from '@/lib/supabase/server'
 import Navbar from '@/components/navbar'
 import Link from 'next/link'
 import { TrendingUp, Building2, BarChart3, Shield, Newspaper } from 'lucide-react'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = createClient()
+  
+  // Fetch live counts from database
+  const [preferredsResult, issuersResult, splitCorpsResult] = await Promise.all([
+    supabase.from('preferred_shares').select('id', { count: 'exact', head: true }).eq('is_active', true),
+    supabase.from('issuers').select('id', { count: 'exact', head: true }),
+    supabase.from('split_corporations').select('id', { count: 'exact', head: true }).eq('is_active', true)
+  ])
+  
+  const preferredsCount = preferredsResult.count || 0
+  const issuersCount = issuersResult.count || 0
+  const splitCorpsCount = splitCorpsResult.count || 0
+
   return (
     <>
       <Navbar />
@@ -53,7 +67,7 @@ export default function HomePage() {
                     <Building2 className="h-8 w-8 text-primary-600" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-lg font-medium text-gray-900">25+ Issuers</h3>
+                    <h3 className="text-lg font-medium text-gray-900">{issuersCount}+ Issuers</h3>
                     <p className="mt-2 text-sm text-gray-500">
                       Big 6 banks, utilities, insurance companies, pipelines, and more.
                     </p>
@@ -122,15 +136,15 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 text-center">
             <div>
-              <div className="text-4xl font-extrabold text-white">56+</div>
+              <div className="text-4xl font-extrabold text-white">{preferredsCount}+</div>
               <div className="mt-2 text-base text-primary-200">Preferred Shares</div>
             </div>
             <div>
-              <div className="text-4xl font-extrabold text-white">25+</div>
+              <div className="text-4xl font-extrabold text-white">{issuersCount}+</div>
               <div className="mt-2 text-base text-primary-200">Issuers</div>
             </div>
             <div>
-              <div className="text-4xl font-extrabold text-white">7</div>
+              <div className="text-4xl font-extrabold text-white">{splitCorpsCount}</div>
               <div className="mt-2 text-base text-primary-200">Split Corps</div>
             </div>
           </div>
