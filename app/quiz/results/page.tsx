@@ -4,12 +4,21 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar'
 import Link from 'next/link'
-import { CheckCircle, Award, TrendingUp, Shield, Target, AlertTriangle } from 'lucide-react'
+import { CheckCircle, Award, TrendingUp, Shield, Target, AlertTriangle, Loader2 } from 'lucide-react'
 
 export default function ResultsPage() {
   const router = useRouter()
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [profile, setProfile] = useState<any>(null)
+  
+  // Form state
+  const [email, setEmail] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     const saved = sessionStorage.getItem('quiz_answers')
@@ -21,25 +30,9 @@ export default function ResultsPage() {
     const parsedAnswers = JSON.parse(saved)
     setAnswers(parsedAnswers)
     
-    // Calculate profile
     const calculatedProfile = calculateProfile(parsedAnswers)
     setProfile(calculatedProfile)
   }, [router])
-
-  useEffect(() => {
-    // Load Mailchimp script after component mounts
-    const script = document.createElement('script')
-    script.src = '//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'
-    script.async = true
-    document.body.appendChild(script)
-    
-    return () => {
-      // Cleanup
-      if (document.body.contains(script)) {
-        document.body.removeChild(script)
-      }
-    }
-  }, [])
 
   const calculateProfile = (answers: Record<number, string>) => {
     let riskScore = 0
@@ -108,6 +101,48 @@ export default function ResultsPage() {
     }
     
     return { type, description, recommendations, riskScore, incomeFocus, knowledgeLevel }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || !profile) return
+    
+    setLoading(true)
+    setError('')
+    
+    try {
+      const response = await fetch('https://veqfwdhejertooqojnup.supabase.co/rest/v1/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcWZ3ZGhlamVydG9vcW9qbnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDY3MjQsImV4cCI6MjA4NzAyMjcyNH0.Nl822bymoaQtdAEbLm-N-h-2PvUdNGYqV9lXnwOn1iU',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          email,
+          first_name: firstName || null,
+          last_name: lastName || null,
+          phone: phone || null,
+          investor_type: profile.type,
+          risk_score: profile.riskScore,
+          knowledge_level: profile.knowledgeLevel,
+          quiz_answers: answers
+        })
+      })
+      
+      if (response.ok) {
+        setSuccess(true)
+        sessionStorage.removeItem('quiz_answers')
+      } else if (response.status === 409) {
+        setError('This email is already registered.')
+      } else {
+        setError('Something went wrong. Please try again.')
+      }
+    } catch (err) {
+      setError('Connection error. Please try again.')
+    }
+    
+    setLoading(false)
   }
 
   if (!profile) {
@@ -191,96 +226,149 @@ export default function ResultsPage() {
             </div>
           </div>
 
-          {/* Mailchimp Form */}
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <div id="mc_embed_shell">
-              <style dangerouslySetInnerHTML={{__html: `
-                #mc_embed_signup { background: #fff; clear: left; font: 14px Helvetica, Arial, sans-serif; width: 100%; }
-                #mc_embed_signup .mc-field-group { margin-bottom: 15px; }
-                #mc_embed_signup .mc-field-group label { display: block; margin-bottom: 5px; font-weight: 500; color: #374151; }
-                #mc_embed_signup .mc-field-group input { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
-                #mc_embed_signup .mc-field-group input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-                #mc_embed_signup .asterisk { color: #ef4444; }
-                #mc_embed_signup .button { background: #3b82f6; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; font-size: 16px; }
-                #mc_embed_signup .button:hover { background: #2563eb; }
-                #mc_embed_signup h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 15px; color: #111827; }
-              `}} />
-              <div id="mc_embed_signup">
-                <form 
-                  action="https://Com.us9.list-manage.com/subscribe/post?u=1575b4f449976702ed7e9002c&amp;id=bcc90ae32d&amp;f_id=003ee9e3f0" 
-                  method="post" 
-                  id="mc-embedded-subscribe-form" 
-                  name="mc-embedded-subscribe-form" 
-                  className="validate" 
-                  target="_blank"
-                >
-                  <div id="mc_embed_signup_scroll">
-                    <h2>Subscribe & Get the Full Report</h2>
-                    <div className="indicates-required mb-4 text-sm text-gray-500">
-                      <span className="asterisk">*</span> indicates required
+          {/* Email Capture Form */}
+          {!success ? (
+            <div className="bg-white rounded-xl shadow-lg p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Get Your Full Report
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Enter your details to receive your complete investment analysis with specific preferred share recommendations.
+              </p>
+
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                  {error}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      Email Address <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="you@example.com"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="John"
+                      />
                     </div>
-                    
-                    <div className="mc-field-group">
-                      <label htmlFor="mce-EMAIL">Email Address <span className="asterisk">*</span></label>
-                      <input type="email" name="EMAIL" className="required email" id="mce-EMAIL" required />
-                    </div>
-                    
-                    <div className="mc-field-group">
-                      <label htmlFor="mce-FNAME">First Name</label>
-                      <input type="text" name="FNAME" className="text" id="mce-FNAME" />
-                    </div>
-                    
-                    <div className="mc-field-group">
-                      <label htmlFor="mce-LNAME">Last Name</label>
-                      <input type="text" name="LNAME" className="text" id="mce-LNAME" />
-                    </div>
-                    
-                    <div className="mc-field-group">
-                      <label htmlFor="mce-PHONE">Phone Number</label>
-                      <input type="text" name="PHONE" className="REQ_CSS" id="mce-PHONE" />
-                    </div>
-                    
-                    <div hidden>
-                      <input type="hidden" name="tags" value="15370241" />
-                    </div>
-                    
-                    <div id="mce-responses" className="clear">
-                      <div className="response" id="mce-error-response" style={{ display: 'none' }}></div>
-                      <div className="response" id="mce-success-response" style={{ display: 'none' }}></div>
-                    </div>
-                    
-                    <div style={{ position: 'absolute', left: '-5000px' }} aria-hidden="true">
-                      <input type="text" name="b_1575b4f449976702ed7e9002c_bcc90ae32d" tabIndex={-1} />
-                    </div>
-                    
-                    <div className="clear mt-6">
-                      <input type="submit" name="subscribe" id="mc-embedded-subscribe" className="button" value="Subscribe & Get Report" />
+                    <div>
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        placeholder="Doe"
+                      />
                     </div>
                   </div>
-                </form>
+
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="+1 (555) 000-0000"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading || !email}
+                  className="w-full mt-6 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center disabled:opacity-50"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    'Get My Report'
+                  )}
+                </button>
+
+                <p className="text-xs text-gray-500 mt-4 text-center">
+                  🔒 Your data is stored securely. We never share your information.
+                </p>
+              </form>
+            </div>
+          ) : (
+            <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+                <CheckCircle className="w-10 h-10 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                You're In!
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Your personalized investment report has been saved. We'll send updates to <strong>{email}</strong>.
+              </p>
+              
+              <div className="space-y-3">
+                <Link
+                  href="/preferreds"
+                  className="block w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
+                >
+                  Browse Preferred Shares
+                </Link>
+                <Link
+                  href="/rankings"
+                  className="block w-full bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                >
+                  View Yield Rankings
+                </Link>
               </div>
             </div>
-            
-            <p className="text-xs text-gray-500 mt-4 text-center">
-              We respect your privacy. Unsubscribe anytime.
-            </p>
-          </div>
+          )}
 
           {/* Bottom Links */}
-          <div className="mt-8 grid grid-cols-2 gap-4">
-            <Link
-              href="/preferreds"
-              className="block text-center bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-            >
-              Browse Preferred Shares
-            </Link>
-            <Link
-              href="/rankings"
-              className="block text-center bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-            >
-              View Yield Rankings
-            </Link>
-          </div>
+          {!success && (
+            <div className="mt-8 grid grid-cols-2 gap-4">
+              <Link
+                href="/preferreds"
+                className="block text-center bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+              >
+                Browse Preferred Shares
+              </Link>
+              <Link
+                href="/rankings"
+                className="block text-center bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+              >
+                View Yield Rankings
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </>
