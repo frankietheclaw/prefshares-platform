@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/navbar'
-import { formatYield, formatPrice, formatSpread, getIssueTypeColor, getRatingColor } from '@/lib/utils'
 import { ArrowUp, ArrowDown, ArrowsUpDown } from '@heroicons/react/24/outline'
+
+const SUPABASE_URL = 'https://veqfwdhejertooqojnup.supabase.co'
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcWZ3ZGhlamVydG9vcW9qbnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDY3MjQsImV4cCI6MjA4NzAyMjcyNH0.Nl822bymoaQtdAEbLm-N-h-2PvUdNGYqV9lXnwOn1iU'
 
 type Preferred = {
   id: string
@@ -34,10 +36,23 @@ export default function PreferredsPage() {
   }, [])
 
   const fetchPreferreds = async () => {
-    const res = await fetch('/api/preferreds')
-    const data = await res.json()
-    setPreferreds(data || [])
-    setLoading(false)
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/preferred_shares?select=id,symbol,issue_type,last_price,current_yield,credit_rating,reset_spread,issuers(ticker,name,sector)&is_active=eq.true`,
+        {
+          headers: {
+            'apikey': ANON_KEY,
+            'Authorization': `Bearer ${ANON_KEY}`,
+          },
+        }
+      )
+      const data = await res.json()
+      setPreferreds(data || [])
+    } catch (error) {
+      console.error('Failed to fetch:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleSort = (key: SortKey) => {
@@ -104,18 +119,25 @@ export default function PreferredsPage() {
       : <ArrowDown className="w-4 h-4 text-primary-600 ml-1" />
   }
 
-  const SortableHeader = ({ label, column }: { label: string; column: SortKey }) => (
-    <th 
-      scope="col" 
-      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
-      onClick={() => handleSort(column)}
-    >
-      <div className={`flex items-center ${column === 'last_price' || column === 'current_yield' || column === 'reset_spread' ? 'justify-end' : ''}`}>
-        {label}
-        <SortIcon column={column} />
-      </div>
-    </th>
-  )
+  const formatYield = (val: number | null) => val ? `${val.toFixed(2)}%` : '-'
+  const formatPrice = (val: number | null) => val ? `$${val.toFixed(2)}` : '-'
+  const formatSpread = (val: number | null) => val ? `+${val.toFixed(2)}%` : '-'
+  
+  const getIssueTypeColor = (type: string) => {
+    const colors: Record<string, string> = {
+      reset: 'bg-blue-100 text-blue-800',
+      perpetual: 'bg-purple-100 text-purple-800',
+      floating: 'bg-green-100 text-green-800',
+    }
+    return colors[type] || 'bg-gray-100 text-gray-800'
+  }
+  
+  const getRatingColor = (rating: string | null) => {
+    if (!rating) return 'text-gray-400'
+    if (rating === 'P-1') return 'text-green-600 font-semibold'
+    if (rating === 'P-2') return 'text-blue-600'
+    return 'text-gray-600'
+  }
 
   if (loading) {
     return (
@@ -148,13 +170,76 @@ export default function PreferredsPage() {
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50">
                     <tr>
-                      <SortableHeader label="Symbol" column="symbol" />
-                      <SortableHeader label="Issuer" column="issuer" />
-                      <SortableHeader label="Type" column="issue_type" />
-                      <SortableHeader label="Price" column="last_price" />
-                      <SortableHeader label="Yield" column="current_yield" />
-                      <SortableHeader label="Rating" column="credit_rating" />
-                      <SortableHeader label="Reset Spread" column="reset_spread" />
+                      <th 
+                        scope="col" 
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
+                        onClick={() => handleSort('symbol')}
+                      >
+                        <div className="flex items-center">
+                          Symbol
+                          <SortIcon column="symbol" />
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
+                        onClick={() => handleSort('issuer')}
+                      >
+                        <div className="flex items-center">
+                          Issuer
+                          <SortIcon column="issuer" />
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
+                        onClick={() => handleSort('issue_type')}
+                      >
+                        <div className="flex items-center">
+                          Type
+                          <SortIcon column="issue_type" />
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
+                        onClick={() => handleSort('last_price')}
+                      >
+                        <div className="flex items-center justify-end">
+                          Price
+                          <SortIcon column="last_price" />
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
+                        onClick={() => handleSort('current_yield')}
+                      >
+                        <div className="flex items-center justify-end">
+                          Yield
+                          <SortIcon column="current_yield" />
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
+                        onClick={() => handleSort('credit_rating')}
+                      >
+                        <div className="flex items-center justify-center">
+                          Rating
+                          <SortIcon column="credit_rating" />
+                        </div>
+                      </th>
+                      <th 
+                        scope="col" 
+                        className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100 select-none"
+                        onClick={() => handleSort('reset_spread')}
+                      >
+                        <div className="flex items-center justify-end">
+                          Reset Spread
+                          <SortIcon column="reset_spread" />
+                        </div>
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
