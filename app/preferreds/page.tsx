@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/navbar'
-import { ArrowUp, ArrowDown, ArrowsUpDown } from '@heroicons/react/24/outline'
+import { ArrowUpIcon, ArrowDownIcon, ArrowsUpDownIcon } from '@heroicons/react/24/outline'
 
 const SUPABASE_URL = 'https://veqfwdhejertooqojnup.supabase.co'
 const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcWZ3ZGhlamVydG9vcW9qbnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDY3MjQsImV4cCI6MjA4NzAyMjcyNH0.Nl822bymoaQtdAEbLm-N-h-2PvUdNGYqV9lXnwOn1iU'
@@ -112,11 +112,11 @@ export default function PreferredsPage() {
 
   const SortIcon = ({ column }: { column: SortKey }) => {
     if (sortKey !== column) {
-      return <ArrowsUpDown className="w-4 h-4 text-gray-400 ml-1" />
+      return <ArrowsUpDownIcon className="w-4 h-4 text-gray-400 ml-1" />
     }
     return sortDirection === 'asc' 
-      ? <ArrowUp className="w-4 h-4 text-primary-600 ml-1" />
-      : <ArrowDown className="w-4 h-4 text-primary-600 ml-1" />
+      ? <ArrowUpIcon className="w-4 h-4 text-primary-600 ml-1" />
+      : <ArrowDownIcon className="w-4 h-4 text-primary-600 ml-1" />
   }
 
   const formatYield = (val: number | null) => val ? `${val.toFixed(2)}%` : '-'
