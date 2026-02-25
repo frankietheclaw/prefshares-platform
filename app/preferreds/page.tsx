@@ -16,10 +16,13 @@ type Preferred = {
   reset_spread: number | null
   sector: string | null
   industry: string | null
+  week_52_high: number | null
+  week_52_low: number | null
+  volume: number | null
+  price_change_percent: number | null
+  market_cap: number | null
   dividend_rate: number | null
   dividend_frequency: string | null
-  ex_dividend_date: string | null
-  payment_date: string | null
   description: string | null
   issuers?: {
     ticker: string
@@ -28,7 +31,7 @@ type Preferred = {
   }
 }
 
-type SortKey = 'symbol' | 'issuer' | 'issue_type' | 'last_price' | 'current_yield' | 'credit_rating' | 'reset_spread' | 'sector' | 'industry' | 'dividend_rate'
+type SortKey = 'symbol' | 'issuer' | 'issue_type' | 'last_price' | 'current_yield' | 'credit_rating' | 'reset_spread' | 'sector' | 'week_52_high' | 'volume' | 'price_change_percent' | 'market_cap'
 
 const SUPABASE_URL = 'https://veqfwdhejertooqojnup.supabase.co'
 const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcWZ3ZGhlamVydG9vcW9qbnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDY3MjQsImV4cCI6MjA4NzAyMjcyNH0.Nl822bymoaQtdAEbLm-N-h-2PvUdNGYqV9lXnwOn1iU'
@@ -38,7 +41,6 @@ export default function PreferredsPage() {
   const [loading, setLoading] = useState(true)
   const [sortKey, setSortKey] = useState<SortKey>('current_yield')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
-  const [filterSector, setFilterSector] = useState<string>('all')
 
   useEffect(() => {
     fetchPreferreds()
@@ -47,7 +49,7 @@ export default function PreferredsPage() {
   const fetchPreferreds = async () => {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/preferred_shares?select=id,symbol,name,issue_type,last_price,current_yield,credit_rating,reset_spread,sector,industry,dividend_rate,dividend_frequency,ex_dividend_date,payment_date,description,issuers(ticker,name,sector)&is_active=eq.true`,
+        `${SUPABASE_URL}/rest/v1/preferred_shares?select=*&is_active=eq.true`,
         {
           headers: {
             'apikey': ANON_KEY,
@@ -69,19 +71,11 @@ export default function PreferredsPage() {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
       setSortKey(key)
-      setSortDirection(key === 'current_yield' || key === 'reset_spread' || key === 'dividend_rate' ? 'desc' : 'asc')
+      setSortDirection(key === 'current_yield' || key === 'reset_spread' || key === 'week_52_high' || key === 'volume' || key === 'market_cap' ? 'desc' : 'asc')
     }
   }
 
-  // Get unique sectors for filter
-  const sectors = ['all', ...new Set(preferreds.map(p => p.sector).filter(Boolean))]
-
-  // Filter by sector
-  const filteredPreferreds = filterSector === 'all' 
-    ? preferreds 
-    : preferreds.filter(p => p.sector === filterSector)
-
-  const sortedPreferreds = [...filteredPreferreds].sort((a, b) => {
+  const sortedPreferreds = [...preferreds].sort((a, b) => {
     let aVal: any
     let bVal: any
 
@@ -118,17 +112,21 @@ export default function PreferredsPage() {
         aVal = a.sector || ''
         bVal = b.sector || ''
         break
-      case 'sector':
-        aVal = a.sector || ''
-        bVal = b.sector || ''
+      case 'week_52_high':
+        aVal = a.week_52_high || 0
+        bVal = b.week_52_high || 0
         break
-      case 'industry':
-        aVal = a.industry || ''
-        bVal = b.industry || ''
+      case 'volume':
+        aVal = a.volume || 0
+        bVal = b.volume || 0
         break
-      case 'dividend_rate':
-        aVal = a.dividend_rate || 0
-        bVal = b.dividend_rate || 0
+      case 'price_change_percent':
+        aVal = a.price_change_percent || 0
+        bVal = b.price_change_percent || 0
+        break
+      case 'market_cap':
+        aVal = a.market_cap || 0
+        bVal = b.market_cap || 0
         break
       default:
         return 0
@@ -155,7 +153,13 @@ export default function PreferredsPage() {
   const formatYield = (val: number | null) => val ? `${val.toFixed(2)}%` : '-'
   const formatPrice = (val: number | null) => val ? `$${val.toFixed(2)}` : '-'
   const formatSpread = (val: number | null) => val ? `+${val.toFixed(2)}%` : '-'
-  const formatDate = (val: string | null) => val ? new Date(val).toLocaleDateString() : '-'
+  const formatVolume = (val: number | null) => val ? (val / 1000000).toFixed(2) + 'M' : '-'
+  const formatMarketCap = (val: number | null) => val ? '$' + (val / 1000000000).toFixed(2) + 'B' : '-'
+  const formatChange = (val: number | null) => {
+    if (!val) return '-'
+    const sign = val >= 0 ? '+' : ''
+    return `${sign}${val.toFixed(2)}%`
+  }
   
   const getIssueTypeColor = (type: string) => {
     const colors: Record<string, string> = {
@@ -173,19 +177,6 @@ export default function PreferredsPage() {
     return 'text-gray-600'
   }
 
-  const getSectorColor = (sector: string | null) => {
-    if (!sector) return 'bg-gray-100 text-gray-800'
-    const colors: Record<string, string> = {
-      'Energy': 'bg-orange-100 text-orange-800',
-      'Utilities': 'bg-blue-100 text-blue-800',
-      'Finance': 'bg-green-100 text-green-800',
-      'Real Estate': 'bg-purple-100 text-purple-800',
-      'Materials': 'bg-yellow-100 text-yellow-800',
-      'Industrials': 'bg-indigo-100 text-indigo-800',
-    }
-    return colors[sector] || 'bg-gray-100 text-gray-800'
-  }
-
   if (loading) {
     return (
       <>
@@ -200,28 +191,13 @@ export default function PreferredsPage() {
   return (
     <>
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="sm:flex sm:items-center sm:justify-between">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-2xl font-semibold text-gray-900">All Preferred Shares</h1>
             <p className="mt-2 text-sm text-gray-700">
               Browse all {preferreds?.length || 0} Canadian preferred shares. Click column headers to sort.
             </p>
-          </div>
-          
-          {/* Sector Filter */}
-          <div className="mt-4 sm:mt-0">
-            <select
-              value={filterSector}
-              onChange={(e) => setFilterSector(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-            >
-              {sectors.map(sector => (
-                <option key={sector} value={sector}>
-                  {sector === 'all' ? 'All Sectors' : sector}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
 
@@ -232,77 +208,38 @@ export default function PreferredsPage() {
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('symbol')}
-                      >
+                      <th onClick={() => handleSort('symbol')} className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
                         <div className="flex items-center">Symbol <SortIcon column="symbol" /></div>
                       </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('issuer')}
-                      >
+                      <th onClick={() => handleSort('issuer')} className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
                         <div className="flex items-center">Issuer <SortIcon column="issuer" /></div>
                       </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('sector')}
-                      >
-                        <div className="flex items-center">Sector <SortIcon column="sector" /></div>
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                        Industry
-                      </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('issue_type')}
-                      >
+                      <th onClick={() => handleSort('issue_type')} className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
                         <div className="flex items-center">Type <SortIcon column="issue_type" /></div>
                       </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('last_price')}
-                      >
+                      <th onClick={() => handleSort('last_price')} className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
                         <div className="flex items-center justify-end">Price <SortIcon column="last_price" /></div>
                       </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('current_yield')}
-                      >
+                      <th onClick={() => handleSort('price_change_percent')} className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
+                        <div className="flex items-center justify-end">Change <SortIcon column="price_change_percent" /></div>
+                      </th>
+                      <th onClick={() => handleSort('current_yield')} className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
                         <div className="flex items-center justify-end">Yield <SortIcon column="current_yield" /></div>
                       </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('dividend_rate')}
-                      >
-                        <div className="flex items-center justify-end">Div Rate <SortIcon column="dividend_rate" /></div>
-                      </th>
-                      <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">
-                        Freq
-                      </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('credit_rating')}
-                      >
+                      <th onClick={() => handleSort('credit_rating')} className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
                         <div className="flex items-center justify-center">Rating <SortIcon column="credit_rating" /></div>
                       </th>
-                      <th 
-                        scope="col" 
-                        className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleSort('reset_spread')}
-                      >
-                        <div className="flex items-center justify-end">Reset Spread <SortIcon column="reset_spread" /></div>
+                      <th onClick={() => handleSort('reset_spread')} className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
+                        <div className="flex items-center justify-end">Spread <SortIcon column="reset_spread" /></div>
                       </th>
-                      <th scope="col" className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900">
-                        Ex-Div
+                      <th onClick={() => handleSort('week_52_high')} className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
+                        <div className="flex items-center justify-end">52W High <SortIcon column="week_52_high" /></div>
+                      </th>
+                      <th onClick={() => handleSort('volume')} className="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
+                        <div className="flex items-center justify-end">Volume <SortIcon column="volume" /></div>
+                      </th>
+                      <th onClick={() => handleSort('sector')} className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100">
+                        <div className="flex items-center">Sector <SortIcon column="sector" /></div>
                       </th>
                     </tr>
                   </thead>
@@ -313,7 +250,6 @@ export default function PreferredsPage() {
                           <Link 
                             href={`/preferreds/${pref.symbol}`}
                             className="text-primary-600 hover:text-primary-900"
-                            title={pref.description || pref.name}
                           >
                             {pref.symbol}
                           </Link>
@@ -327,16 +263,6 @@ export default function PreferredsPage() {
                           </Link>
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
-                          {pref.sector ? (
-                            <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${getSectorColor(pref.sector)}`}>
-                              {pref.sector}
-                            </span>
-                          ) : '-'}
-                        </td>
-                        <td className="px-3 py-4 text-sm text-gray-500 max-w-xs truncate">
-                          {pref.industry || '-'}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm">
                           <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${getIssueTypeColor(pref.issue_type)}`}>
                             {pref.issue_type}
                           </span>
@@ -344,14 +270,13 @@ export default function PreferredsPage() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-right text-gray-500">
                           {formatPrice(pref.last_price)}
                         </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-right">
+                          <span className={pref.price_change_percent && pref.price_change_percent >= 0 ? 'text-green-600' : 'text-red-600'}>
+                            {formatChange(pref.price_change_percent)}
+                          </span>
+                        </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-right font-medium text-gray-900">
                           {formatYield(pref.current_yield)}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-right text-gray-500">
-                          {pref.dividend_rate ? `$${pref.dividend_rate.toFixed(3)}` : '-'}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-center text-gray-500">
-                          {pref.dividend_frequency ? pref.dividend_frequency.charAt(0) : '-'}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-center">
                           <span className={getRatingColor(pref.credit_rating)}>
@@ -361,8 +286,15 @@ export default function PreferredsPage() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-right text-gray-500">
                           {formatSpread(pref.reset_spread)}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-center text-gray-500">
-                          {formatDate(pref.ex_dividend_date)}
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-right text-gray-500">
+                          {formatPrice(pref.week_52_high)}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-right text-gray-500">
+                          {formatVolume(pref.volume)}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <div className="text-xs">{pref.sector || '-'}</div>
+                          {pref.industry && <div className="text-xs text-gray-400">{pref.industry}</div>}
                         </td>
                       </tr>
                     ))}
