@@ -9,7 +9,6 @@ export default async function SplitCorpsPage() {
   const { data: splitCorps, error } = await supabase
     .from('split_corporations')
     .select('*')
-    .eq('is_active', true)
     .order('name', { ascending: true })
 
   if (error) {

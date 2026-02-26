@@ -49,7 +49,7 @@ export default function PreferredsPage() {
   const fetchPreferreds = async () => {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/preferred_shares?select=*&is_active=eq.true`,
+        `${SUPABASE_URL}/rest/v1/preferred_shares?select=*,issuers(ticker,name,sector)&is_active=eq.true&order=current_yield.desc`,
         {
           headers: {
             'apikey': ANON_KEY,
