@@ -104,7 +104,7 @@ export default function PreferredsScreener() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   const [activeView, setActiveView] = useState<string>('overview')
   const [visibleColumns, setVisibleColumns] = useState<string[]>(VIEW_PRESETS.overview)
-  const [showColumnPicker, setShowColumnPicker] = useState(false)
+  const [showColumnPicker, setShowColumnPicker] = useState(true)
   
   // Filters
   const [filters, setFilters] = useState({
@@ -115,7 +115,7 @@ export default function PreferredsScreener() {
     maxYield: '',
     issuer: '',
   })
-  const [showFilters, setShowFilters] = useState(false)
+  const [showFilters, setShowFilters] = useState(true)
 
   useEffect(() => {
     fetchPreferreds()
