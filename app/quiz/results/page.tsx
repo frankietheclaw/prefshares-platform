@@ -111,11 +111,11 @@ export default function ResultsPage() {
     setError('')
     
     try {
-      const response = await fetch('https://veqfwdhejertooqojnup.supabase.co/rest/v1/leads', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/leads`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcWZ3ZGhlamVydG9vcW9qbnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDY3MjQsImV4cCI6MjA4NzAyMjcyNH0.Nl822bymoaQtdAEbLm-N-h-2PvUdNGYqV9lXnwOn1iU',
+          'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
           'Prefer': 'return=minimal'
         },
         body: JSON.stringify({

@@ -52,8 +52,8 @@ type ColumnConfig = {
   width?: string
 }
 
-const SUPABASE_URL = 'https://veqfwdhejertooqojnup.supabase.co'
-const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcWZ3ZGhlamVydG9vcW9qbnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDY3MjQsImV4cCI6MjA4NzAyMjcyNH0.Nl822bymoaQtdAEbLm-N-h-2PvUdNGYqV9lXnwOn1iU'
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 // All available columns
 const ALL_COLUMNS: ColumnConfig[] = [
