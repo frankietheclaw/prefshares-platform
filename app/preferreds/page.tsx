@@ -40,7 +40,6 @@ type Preferred = {
     ticker: string
     name: string
     sector: string
-    sedar_url: string | null
   }
 }
 
@@ -87,7 +86,6 @@ const ALL_COLUMNS: ColumnConfig[] = [
   { key: 'par_value', label: 'Par Value', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `$${v.toFixed(2)}` : '-' },
   { key: 'is_cumulative', label: 'Cumulative', sortable: true, align: 'center', width: 'w-24', format: (v) => v ? 'Yes' : 'No' },
   { key: 'yield_to_worst', label: 'YTW', sortable: true, align: 'right', width: 'w-20', format: (v) => v ? `${(v * 100).toFixed(2)}%` : '-' },
-  { key: 'sedar_url', label: 'SEDAR+', sortable: false, align: 'center', width: 'w-20' },
 ]
 
 // Preset views
@@ -126,7 +124,7 @@ export default function PreferredsScreener() {
   const fetchPreferreds = async () => {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/preferred_shares?select=*,issuers(ticker,name,sector,sedar_url)&is_active=eq.true&order=current_yield.desc`,
+        `${SUPABASE_URL}/rest/v1/preferred_shares?select=*,issuers(ticker,name,sector)&is_active=eq.true&order=current_yield.desc`,
         {
           headers: {
             'apikey': ANON_KEY,
@@ -466,13 +464,6 @@ export default function PreferredsScreener() {
                     } else if (col.key === 'price_change_percent') {
                       const val = pref.price_change_percent
                       content = <span className={val && val >= 0 ? 'text-green-600' : 'text-red-600'}>{col.format?.(val) || val || '-'}</span>
-                    } else if (col.key === 'sedar_url') {
-                      const sedarUrl = pref.issuers?.sedar_url
-                      content = sedarUrl ? (
-                        <a href={sedarUrl} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-900">
-                          View
-                        </a>
-                      ) : '-'
                     } else {
                       const val = col.key === 'issuer' ? undefined : (pref as any)[col.key]
                       content = col.format ? col.format(val) : (val || '-')
