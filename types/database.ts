@@ -67,7 +67,6 @@ export interface Database {
           ask_price: number | null
           volume_30day: number | null
           is_active: boolean
-          tmx_link: string | null
           created_at: string
           updated_at: string
         }
@@ -94,7 +93,6 @@ export interface Database {
           ask_price?: number | null
           volume_30day?: number | null
           is_active?: boolean
-          tmx_link?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -121,7 +119,6 @@ export interface Database {
           ask_price?: number | null
           volume_30day?: number | null
           is_active?: boolean
-          tmx_link?: string | null
           created_at?: string
           updated_at?: string
         }
