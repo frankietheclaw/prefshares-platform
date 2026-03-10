@@ -12,8 +12,6 @@ type Preferred = {
   name: string | null
   issue_type: string
   last_price: number | null
-  bid_price: number | null
-  ask_price: number | null
   current_yield: number | null
   current_dividend: number | null
   dividend_rate: number | null
@@ -62,8 +60,6 @@ const ALL_COLUMNS: ColumnConfig[] = [
   { key: 'name', label: 'Issue Name', sortable: true, align: 'left', width: 'w-48' },
   { key: 'issue_type', label: 'Type', sortable: true, align: 'left', width: 'w-24' },
   { key: 'last_price', label: 'Price', sortable: true, align: 'right', width: 'w-20', format: (v) => v ? `$${v.toFixed(2)}` : '-' },
-  { key: 'bid_price', label: 'Bid', sortable: true, align: 'right', width: 'w-20', format: (v) => v ? `$${v.toFixed(2)}` : '-' },
-  { key: 'ask_price', label: 'Ask', sortable: true, align: 'right', width: 'w-20', format: (v) => v ? `$${v.toFixed(2)}` : '-' },
   { key: 'price_change_percent', label: 'Change %', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `${v >= 0 ? '+' : ''}${v.toFixed(2)}%` : '-' },
   { key: 'current_yield', label: 'Current Yield', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `${(v * 100).toFixed(2)}%` : '-' },
   { key: 'current_dividend', label: 'Annual Div', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `$${v.toFixed(3)}` : '-' },
@@ -93,7 +89,7 @@ const VIEW_PRESETS: Record<string, string[]> = {
   overview: ['symbol', 'issuer', 'issue_type', 'last_price', 'price_change_percent', 'current_yield', 'credit_rating', 'sector'],
   yield: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'current_dividend', 'dividend_rate', 'dividend_frequency', 'credit_rating'],
   reset: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'reset_spread', 'reset_date', 'reset_benchmark', 'call_date'],
-  trading: ['symbol', 'issuer', 'last_price', 'bid_price', 'ask_price', 'price_change_percent', 'volume', 'volume_30day', 'week_52_high', 'week_52_low'],
+  trading: ['symbol', 'issuer', 'last_price', 'price_change_percent', 'volume', 'volume_30day', 'week_52_high', 'week_52_low'],
   all: ALL_COLUMNS.map(c => c.key),
 }
 
