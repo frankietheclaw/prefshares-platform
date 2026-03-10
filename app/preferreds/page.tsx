@@ -30,7 +30,6 @@ type Preferred = {
   week_52_low: number | null
   volume: number | null
   volume_30day: number | null
-  price_change_percent: number | null
   par_value: number | null
   is_cumulative: boolean | null
   yield_to_worst: number | null
@@ -60,7 +59,6 @@ const ALL_COLUMNS: ColumnConfig[] = [
   { key: 'name', label: 'Issue Name', sortable: true, align: 'left', width: 'w-48' },
   { key: 'issue_type', label: 'Type', sortable: true, align: 'left', width: 'w-24' },
   { key: 'last_price', label: 'Price', sortable: true, align: 'right', width: 'w-20', format: (v) => v ? `$${v.toFixed(2)}` : '-' },
-  { key: 'price_change_percent', label: 'Change %', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `${v >= 0 ? '+' : ''}${v.toFixed(2)}%` : '-' },
   { key: 'current_yield', label: 'Current Yield', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `${(v * 100).toFixed(2)}%` : '-' },
   { key: 'current_dividend', label: 'Annual Div', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `$${v.toFixed(3)}` : '-' },
   { key: 'dividend_rate', label: 'Div Rate', sortable: true, align: 'right', width: 'w-20', format: (v) => v ? `${v.toFixed(2)}%` : '-' },
@@ -86,10 +84,10 @@ const ALL_COLUMNS: ColumnConfig[] = [
 
 // Preset views
 const VIEW_PRESETS: Record<string, string[]> = {
-  overview: ['symbol', 'issuer', 'issue_type', 'last_price', 'price_change_percent', 'current_yield', 'credit_rating', 'sector'],
+  overview: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'credit_rating', 'sector'],
   yield: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'current_dividend', 'dividend_rate', 'dividend_frequency', 'credit_rating'],
   reset: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'reset_spread', 'reset_date', 'reset_benchmark', 'call_date'],
-  trading: ['symbol', 'issuer', 'last_price', 'price_change_percent', 'volume', 'volume_30day', 'week_52_high', 'week_52_low'],
+  trading: ['symbol', 'issuer', 'last_price', 'volume', 'volume_30day', 'week_52_high', 'week_52_low'],
   all: ALL_COLUMNS.map(c => c.key),
 }
 
@@ -457,9 +455,6 @@ export default function PreferredsScreener() {
                       )
                     } else if (col.key === 'credit_rating') {
                       content = <span className={getRatingColor(pref.credit_rating)}>{pref.credit_rating || '-'}</span>
-                    } else if (col.key === 'price_change_percent') {
-                      const val = pref.price_change_percent
-                      content = <span className={val && val >= 0 ? 'text-green-600' : 'text-red-600'}>{col.format?.(val) || val || '-'}</span>
                     } else {
                       const val = col.key === 'issuer' ? undefined : (pref as any)[col.key]
                       content = col.format ? col.format(val) : (val || '-')
