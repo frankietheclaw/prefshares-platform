@@ -16,6 +16,8 @@ type Preferred = {
   current_dividend: number | null
   dividend_rate: number | null
   dividend_frequency: string | null
+  ex_dividend_date: string | null
+  payment_date: string | null
   credit_rating: string | null
   credit_agency: string | null
   reset_spread: number | null
@@ -63,6 +65,8 @@ const ALL_COLUMNS: ColumnConfig[] = [
   { key: 'current_dividend', label: 'Annual Div', sortable: true, align: 'right', width: 'w-24', format: (v) => v ? `$${v.toFixed(3)}` : '-' },
   { key: 'dividend_rate', label: 'Div Rate', sortable: true, align: 'right', width: 'w-20', format: (v) => v ? `${v.toFixed(2)}%` : '-' },
   { key: 'dividend_frequency', label: 'Frequency', sortable: true, align: 'center', width: 'w-24' },
+  { key: 'ex_dividend_date', label: 'Ex-Date', sortable: true, align: 'center', width: 'w-24' },
+  { key: 'payment_date', label: 'Div Date', sortable: true, align: 'center', width: 'w-24' },
   { key: 'credit_rating', label: 'Rating', sortable: true, align: 'center', width: 'w-20' },
   { key: 'credit_agency', label: 'Agency', sortable: true, align: 'center', width: 'w-20' },
   { key: 'reset_spread', label: 'Reset Spread', sortable: true, align: 'right', width: 'w-28', format: (v) => v ? `+${(v * 100).toFixed(2)}%` : '-' },
@@ -85,7 +89,7 @@ const ALL_COLUMNS: ColumnConfig[] = [
 // Preset views
 const VIEW_PRESETS: Record<string, string[]> = {
   overview: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'credit_rating', 'sector'],
-  yield: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'current_dividend', 'dividend_rate', 'dividend_frequency', 'credit_rating'],
+  yield: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'current_dividend', 'dividend_rate', 'dividend_frequency', 'ex_dividend_date', 'payment_date', 'credit_rating'],
   reset: ['symbol', 'issuer', 'issue_type', 'last_price', 'current_yield', 'reset_spread', 'reset_date', 'reset_benchmark', 'call_date'],
   trading: ['symbol', 'issuer', 'last_price', 'volume', 'volume_30day', 'week_52_high', 'week_52_low'],
   all: ALL_COLUMNS.map(c => c.key),
