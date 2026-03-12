@@ -273,6 +273,116 @@ export default function PreferredsScreener() {
           </nav>
         </div>
 
+        {/* Issue Type Categories */}
+        <div className="mb-4">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setFilters(f => ({ ...f, issueType: '' }))}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                filters.issueType === ''
+                  ? 'bg-primary-600 text-white shadow-sm'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              All Types
+            </button>
+            <button
+              onClick={() => setFilters(f => ({ ...f, issueType: 'reset' }))}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                filters.issueType === 'reset'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Rate Reset
+            </button>
+            <button
+              onClick={() => setFilters(f => ({ ...f, issueType: 'perpetual' }))}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                filters.issueType === 'perpetual'
+                  ? 'bg-purple-600 text-white shadow-sm'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Perpetual
+            </button>
+            <button
+              onClick={() => setFilters(f => ({ ...f, issueType: 'floating' }))}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                filters.issueType === 'floating'
+                  ? 'bg-green-600 text-white shadow-sm'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Floating Rate
+            </button>
+            <button
+              onClick={() => setFilters(f => ({ ...f, issueType: 'split_share' }))}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+                filters.issueType === 'split_share'
+                  ? 'bg-orange-600 text-white shadow-sm'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Split Shares
+            </button>
+          </div>
+        </div>
+
+        {/* Issue Type Quick Filters */}
+        <div className="mb-4 flex flex-wrap gap-2">
+          <button
+            onClick={() => setFilters(f => ({ ...f, issueType: '' }))}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+              filters.issueType === '' 
+                ? 'bg-primary-600 text-white' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            All Types
+          </button>
+          <button
+            onClick={() => setFilters(f => ({ ...f, issueType: 'reset' }))}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+              filters.issueType === 'reset' 
+                ? 'bg-blue-600 text-white' 
+                : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
+            }`}
+          >
+            Rate Reset
+          </button>
+          <button
+            onClick={() => setFilters(f => ({ ...f, issueType: 'perpetual' }))}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+              filters.issueType === 'perpetual' 
+                ? 'bg-purple-600 text-white' 
+                : 'bg-purple-50 text-purple-700 hover:bg-purple-100'
+            }`}
+          >
+            Perpetual
+          </button>
+          <button
+            onClick={() => setFilters(f => ({ ...f, issueType: 'floating' }))}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+              filters.issueType === 'floating' 
+                ? 'bg-green-600 text-white' 
+                : 'bg-green-50 text-green-700 hover:bg-green-100'
+            }`}
+          >
+            Floating Rate
+          </button>
+          <button
+            onClick={() => setFilters(f => ({ ...f, issueType: 'split_share' }))}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
+              filters.issueType === 'split_share' 
+                ? 'bg-orange-600 text-white' 
+                : 'bg-orange-50 text-orange-700 hover:bg-orange-100'
+            }`}
+          >
+            Split Shares
+          </button>
+        </div>
+
         {/* Toolbar */}
         <div className="flex flex-wrap gap-3 mb-4 items-center">
           <button
