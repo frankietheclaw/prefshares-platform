@@ -19,15 +19,19 @@ export default async function PreferredPage({ params }: PreferredPageProps) {
     notFound()
   }
 
+  const typedShare = share as { symbol: string; issuer_id: string }
+
   // Get the issuer ticker
   const { data: issuer } = await supabase
     .from('issuers')
     .select('ticker')
-    .eq('id', share.issuer_id)
+    .eq('id', typedShare.issuer_id)
     .single()
 
-  if (issuer?.ticker) {
-    redirect(`/issuers/${issuer.ticker}`)
+  const typedIssuer = issuer as { ticker: string } | null
+
+  if (typedIssuer?.ticker) {
+    redirect(`/issuers/${typedIssuer.ticker}`)
   }
 
   notFound()
