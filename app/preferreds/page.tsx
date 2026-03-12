@@ -418,18 +418,7 @@ export default function PreferredsScreener() {
 
         {/* Filters Panel */}
         {showFilters && (
-          <div className="bg-gray-50 rounded-lg p-4 mb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Issue Type</label>
-              <select
-                value={filters.issueType}
-                onChange={(e) => setFilters(f => ({ ...f, issueType: e.target.value }))}
-                className="w-full text-sm border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-              >
-                <option value="">All</option>
-                {filterOptions.issueTypes.map(t => <option key={t} value={t}>{t}</option>)}
-              </select>
-            </div>
+          <div className="bg-gray-50 rounded-lg p-4 mb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">Sector</label>
               <select
