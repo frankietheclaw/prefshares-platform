@@ -8,13 +8,10 @@ interface PreferredPageProps {
 export default async function PreferredPage({ params }: PreferredPageProps) {
   const supabase = createClient()
   
-  // Get the preferred share with issuer info
+  // Get the preferred share
   const { data: share, error } = await supabase
     .from('preferred_shares')
-    .select(`
-      symbol,
-      issuers(ticker)
-    `)
+    .select('symbol, issuer_id')
     .eq('symbol', params.symbol)
     .single()
 
@@ -22,12 +19,15 @@ export default async function PreferredPage({ params }: PreferredPageProps) {
     notFound()
   }
 
-  // Redirect to issuer page
-  const issuerData = share.issuers as { ticker: string } | null
-  const issuerTicker = issuerData?.ticker
-  
-  if (issuerTicker) {
-    redirect(`/issuers/${issuerTicker}`)
+  // Get the issuer ticker
+  const { data: issuer } = await supabase
+    .from('issuers')
+    .select('ticker')
+    .eq('id', share.issuer_id)
+    .single()
+
+  if (issuer?.ticker) {
+    redirect(`/issuers/${issuer.ticker}`)
   }
 
   notFound()
