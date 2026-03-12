@@ -23,7 +23,9 @@ export default async function PreferredPage({ params }: PreferredPageProps) {
   }
 
   // Redirect to issuer page
-  const issuerTicker = (share.issuers as any)?.ticker
+  const issuerData = share.issuers as { ticker: string } | null
+  const issuerTicker = issuerData?.ticker
+  
   if (issuerTicker) {
     redirect(`/issuers/${issuerTicker}`)
   }
