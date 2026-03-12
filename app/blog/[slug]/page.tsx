@@ -30,6 +30,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .replace(/## (.*)/g, '<h2 class="text-2xl font-bold mt-8 mb-4">$1</h2>')
     .replace(/### (.*)/g, '<h3 class="text-xl font-semibold mt-6 mb-3">$1</h3>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="w-full rounded-lg my-6" />')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-primary-600 hover:text-primary-700 underline">$1</a>')
+    .replace(/^\* (.*)/gm, '<li class="ml-6">$1</li>')
+    .replace(/^- (.*)/gm, '<li class="ml-6">$1</li>')
     .replace(/\n\n/g, '</p><p class="mt-4">')
     .replace(/\n/g, '<br/>')
 
