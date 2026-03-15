@@ -3,14 +3,34 @@ import Navbar from '@/components/navbar'
 import Link from 'next/link'
 import { TrendingUp, Building2, BarChart3, Shield, Newspaper } from 'lucide-react'
 
+async function getCurrentRates() {
+  try {
+    const response = await fetch('https://www.bankofcanada.ca/valet/observations/BD.CDN.5YR.DQ.YLD,BD.CDN.10YR.DQ.YLD,AVG.INTWO/json?recent=1', {
+      next: { revalidate: 3600 } // Cache for 1 hour
+    })
+    const data = await response.json()
+    const latest = data.observations?.[0]
+    
+    return {
+      fiveYear: latest?.['BD.CDN.5YR.DQ.YLD']?.v || null,
+      tenYear: latest?.['BD.CDN.10YR.DQ.YLD']?.v || null,
+      corra: latest?.['AVG.INTWO']?.v || null,
+      date: latest?.d || null
+    }
+  } catch {
+    return { fiveYear: null, tenYear: null, corra: null, date: null }
+  }
+}
+
 export default async function HomePage() {
   const supabase = createClient()
   
-  // Fetch live counts from database
-  const [preferredsResult, issuersResult, splitCorpsResult] = await Promise.all([
+  // Fetch live counts and rates in parallel
+  const [preferredsResult, issuersResult, splitCorpsResult, rates] = await Promise.all([
     supabase.from('preferred_shares').select('id', { count: 'exact', head: true }).eq('is_active', true),
     supabase.from('issuers').select('id', { count: 'exact', head: true }),
-    supabase.from('split_corporations').select('id', { count: 'exact', head: true }).eq('is_active', true)
+    supabase.from('split_corporations').select('id', { count: 'exact', head: true }).eq('is_active', true),
+    getCurrentRates()
   ])
   
   const preferredsCount = preferredsResult.count || 0
@@ -142,6 +162,55 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Canadian Interest Rates */}
+      {(rates.fiveYear || rates.tenYear || rates.corra) && (
+        <div className="bg-gray-50 py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Canadian Interest Rates</h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Key benchmarks for rate reset preferred shares {rates.date && `(${rates.date})`}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              {rates.fiveYear && (
+                <div className="bg-white overflow-hidden shadow rounded-lg">
+                  <div className="px-6 py-5">
+                    <div className="text-sm font-medium text-gray-500">5-Year GoC Bond</div>
+                    <div className="mt-2 flex items-baseline">
+                      <span className="text-3xl font-bold text-gray-900">{rates.fiveYear}%</span>
+                    </div>
+                    <div className="mt-2 text-xs text-gray-400">Rate reset benchmark</div>
+                  </div>
+                </div>
+              )}
+              {rates.tenYear && (
+                <div className="bg-white overflow-hidden shadow rounded-lg">
+                  <div className="px-6 py-5">
+                    <div className="text-sm font-medium text-gray-500">10-Year GoC Bond</div>
+                    <div className="mt-2 flex items-baseline">
+                      <span className="text-3xl font-bold text-gray-900">{rates.tenYear}%</span>
+                    </div>
+                    <div className="mt-2 text-xs text-gray-400">Long-term benchmark</div>
+                  </div>
+                </div>
+              )}
+              {rates.corra && (
+                <div className="bg-white overflow-hidden shadow rounded-lg">
+                  <div className="px-6 py-5">
+                    <div className="text-sm font-medium text-gray-500">CORRA</div>
+                    <div className="mt-2 flex items-baseline">
+                      <span className="text-3xl font-bold text-gray-900">{rates.corra}%</span>
+                    </div>
+                    <div className="mt-2 text-xs text-gray-400">Overnight rate proxy</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* CTA Section */}
       <div className="bg-white">
